@@ -1,0 +1,26 @@
+{
+    "name": "surprise-tech/dingtalk_api",
+    "description": "dingding oa api",
+    "require": {
+        "php": ">=8.2",
+        "alibabacloud/dingtalk": "^2.0",
+        "ext-bcmath": "*"
+    },
+    "require-dev": {
+        "laravel/framework": ">=10",
+        "laravel/pint": "^1.10"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SurpriseTech\\DingtalkApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "atshike",
+            "email": "atshike@foxmail.com"
+        }
+    ],
+    "minimum-stability": "beta"
+}
