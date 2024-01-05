@@ -26,7 +26,7 @@ class DingTalkServices
 {
     private string $access_token;
 
-    private string|null $app;
+    private ?string $app;
 
     private string $cache_dingtalk_oa_access_token_key;
 

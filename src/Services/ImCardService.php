@@ -34,7 +34,7 @@ class ImCardService
 
     private string $appSecret;
 
-    private string|null $app;
+    private ?string $app;
 
     public function __construct($app = null)
     {
