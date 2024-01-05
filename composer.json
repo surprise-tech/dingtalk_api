@@ -7,6 +7,7 @@
         "ext-bcmath": "*"
     },
     "require-dev": {
+        "laravel/framework": ">=10",
         "laravel/pint": "^1.10"
     },
     "license": "MIT",
