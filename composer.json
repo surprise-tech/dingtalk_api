@@ -1,6 +1,6 @@
 {
     "name": "surprise-tech/dingtalk_api",
-    "description": "dingding oa api",
+    "description": "dingding/yida api",
     "require": {
         "php": ">=8.2",
         "alibabacloud/dingtalk": "^2.0",
