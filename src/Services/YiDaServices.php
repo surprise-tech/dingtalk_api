@@ -11,6 +11,9 @@ use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\CreateOrUpdateFormDataResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\DeleteFormDataHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\DeleteFormDataRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\DeleteFormDataResponse;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFieldDefByUuidHeaders;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFieldDefByUuidRequest;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFieldDefByUuidResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDResponse;
@@ -126,6 +129,25 @@ class YiDaServices
     }
 
     /**
+     * 获取表单内的组件信息
+     * https://open.dingtalk.com/document/isvapp/get-form-field-information-based-on-form-uuid
+     */
+    public function getFormField($formUuid, $userId): GetFieldDefByUuidResponse
+    {
+        $client = self::createClient();
+        $getFieldDefByUuidHeaders = new GetFieldDefByUuidHeaders([]);
+        $getFieldDefByUuidHeaders->xAcsDingtalkAccessToken = $this->access_token;
+        $getFieldDefByUuidRequest = new GetFieldDefByUuidRequest([
+            'appType' => $this->appType,
+            'systemToken' => $this->systemToken,
+            'formUuid' => $formUuid,
+            'userId' => $userId,
+        ]);
+
+        return $client->getFieldDefByUuidWithOptions($getFieldDefByUuidRequest, $getFieldDefByUuidHeaders, new RuntimeOptions([]));
+    }
+
+    /**
      * 查询表单实例数据列表.
      * https://open.dingtalk.com/document/isvapp/querying-form-instance-data
      */
@@ -155,7 +177,7 @@ class YiDaServices
                 $this->get_access_token();
                 $rs = $this->getFormList($formUuid, $searchFieldJson, $userId, $currentPage, $pageSize);
             }
-            DingNoticeService::sendNotify($userId, json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
+            DingNoticeService::sendNotify([$userId], json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
         }
 
         return $rs ?? null;
@@ -224,7 +246,7 @@ class YiDaServices
             $rs = $client->createOrUpdateFormDataWithOptions($createOrUpdateFormDataRequest, $createOrUpdateFormDataHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
             info($err->getMessage().':'.__CLASS__.':'.json_encode($formData, JSON_UNESCAPED_UNICODE));
-            DingNoticeService::sendNotify($userId, json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
+            DingNoticeService::sendNotify([$userId], json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
         }
 
         return $rs ?? null;
@@ -251,7 +273,7 @@ class YiDaServices
             $rs = $client->saveFormDataWithOptions($saveFormDataRequest, $saveFormDataHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
             info($err->getMessage().':'.__CLASS__.':'.json_encode($formData, JSON_UNESCAPED_UNICODE));
-            DingNoticeService::sendNotify($userId, json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
+            DingNoticeService::sendNotify([$userId], json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
         }
 
         return $rs ?? null;
@@ -279,7 +301,7 @@ class YiDaServices
             $rs = $client->updateFormDataWithOptions($updateFormDataRequest, $updateFormDataHeaders, new RuntimeOptions([]));
         } catch (\Exception $err) {
             info($err->getMessage().':'.__CLASS__.':'.json_encode($formData, JSON_UNESCAPED_UNICODE));
-            DingNoticeService::sendNotify($userId, json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
+            DingNoticeService::sendNotify([$userId], json_encode($err->getMessage(), JSON_UNESCAPED_UNICODE));
         }
 
         return $rs ?? null;
