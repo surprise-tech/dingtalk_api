@@ -132,14 +132,14 @@ class YiDaServices
      * 获取表单内的组件信息
      * https://open.dingtalk.com/document/isvapp/get-form-field-information-based-on-form-uuid
      */
-    public function getFormField($formUuid, $userId): GetFieldDefByUuidResponse
+    public function getFormField($formUuid, $userId, $appType = null, $systemToken = null): GetFieldDefByUuidResponse
     {
         $client = self::createClient();
         $getFieldDefByUuidHeaders = new GetFieldDefByUuidHeaders([]);
         $getFieldDefByUuidHeaders->xAcsDingtalkAccessToken = $this->access_token;
         $getFieldDefByUuidRequest = new GetFieldDefByUuidRequest([
-            'appType' => $this->appType,
-            'systemToken' => $this->systemToken,
+            'appType' => $appType ?? $this->appType,
+            'systemToken' => $systemToken ?? $this->systemToken,
             'formUuid' => $formUuid,
             'userId' => $userId,
         ]);
@@ -151,14 +151,14 @@ class YiDaServices
      * 查询表单实例数据列表.
      * https://open.dingtalk.com/document/isvapp/querying-form-instance-data
      */
-    public function getFormList($formUuid, $userId, $searchFieldJson = [], $currentPage = 1, $pageSize = 100): ?SearchFormDatasResponse
+    public function getFormList($formUuid, $userId, $searchFieldJson = [], $currentPage = 1, $pageSize = 100, $appType = null, $systemToken = null): ?SearchFormDatasResponse
     {
         $client = self::createClient();
         $searchFormDatasHeaders = new SearchFormDatasHeaders([]);
         $searchFormDatasHeaders->xAcsDingtalkAccessToken = $this->access_token;
         $params = [
-            'appType' => $this->appType,
-            'systemToken' => $this->systemToken,
+            'appType' => $appType ?? $this->appType,
+            'systemToken' => $systemToken ?? $this->systemToken,
             'userId' => $userId,
             'formUuid' => $formUuid,
             'currentPage' => $currentPage,
@@ -187,14 +187,14 @@ class YiDaServices
      * 获取子表组件数据
      * https://open.dingtalk.com/document/isvapp/obtain-child-table-component-data
      */
-    public function obtainChildTable($formUuid, $tableFieldId, $formInstanceId, $userId, $pageNumber = 1, $pageSize = 10): ListTableDataByFormInstanceIdTableIdResponse
+    public function obtainChildTable($formUuid, $tableFieldId, $formInstanceId, $userId, $pageNumber = 1, $pageSize = 10, $appType = null, $systemToken = null): ListTableDataByFormInstanceIdTableIdResponse
     {
         $client = self::createClient();
         $listTableDataByFormInstanceIdTableIdHeaders = new ListTableDataByFormInstanceIdTableIdHeaders([]);
         $listTableDataByFormInstanceIdTableIdHeaders->xAcsDingtalkAccessToken = $this->access_token;
         $params = [
-            'appType' => $this->appType,
-            'systemToken' => $this->systemToken,
+            'appType' => $appType ?? $this->appType,
+            'systemToken' => $systemToken ?? $this->systemToken,
             'formUuid' => $formUuid,
             'tableFieldId' => $tableFieldId,
             'pageNumber' => $pageNumber,
@@ -210,14 +210,14 @@ class YiDaServices
      * 实例ID查询表单实例数据.
      * https://open.dingtalk.com/document/isvapp/query-form-data
      */
-    public function getFormInstId($instId, $userId): GetFormDataByIDResponse
+    public function getFormInstId($instId, $userId, $appType = null, $systemToken = null): GetFormDataByIDResponse
     {
         $client = self::createClient();
         $getFormDataByIDHeaders = new GetFormDataByIDHeaders([]);
         $getFormDataByIDHeaders->xAcsDingtalkAccessToken = $this->access_token;
         $getFormDataByIDRequest = new GetFormDataByIDRequest([
-            'appType' => $this->appType,
-            'systemToken' => $this->systemToken,
+            'appType' => $appType ?? $this->appType,
+            'systemToken' => $systemToken ?? $this->systemToken,
             'userId' => $userId,
         ]);
 
@@ -330,14 +330,14 @@ class YiDaServices
      * 删除表单数据
      * https://open.dingtalk.com/document/isvapp/delete-form-data.
      */
-    public function deleteFormData($formInstanceId, $userId): ?DeleteFormDataResponse
+    public function deleteFormData($formInstanceId, $userId, $appType = null, $systemToken = null): ?DeleteFormDataResponse
     {
         $client = self::createClient();
         $deleteFormDataHeaders = new DeleteFormDataHeaders([]);
         $deleteFormDataHeaders->xAcsDingtalkAccessToken = $this->access_token;
         $deleteFormDataRequest = new DeleteFormDataRequest([
-            'appType' => $this->appType,
-            'systemToken' => $this->systemToken,
+            'appType' => $appType ?? $this->appType,
+            'systemToken' => $systemToken ?? $this->systemToken,
             'userId' => $userId,
             'formInstanceId' => $formInstanceId,
         ]);
