@@ -17,6 +17,9 @@ use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFieldDefByUuidResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetFormDataByIDResponse;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetInstanceByIdHeaders;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetInstanceByIdRequest;
+use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetInstanceByIdResponse;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetOpenUrlHeaders;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetOpenUrlRequest;
 use AlibabaCloud\SDK\Dingtalk\Vyida_1_0\Models\GetOpenUrlResponse;
@@ -53,14 +56,14 @@ class YiDaServices
 
     private string $systemToken;
 
-    public function __construct()
+    public function __construct($app_type = null, $system_token = null, $appkey = null, $appsecret = null)
     {
-        $this->appType = config('services.yida.app_type');
-        $this->systemToken = config('services.yida.system_token');
-        $this->appKey = config('services.yida.appkey');
-        $this->appSecret = config('services.yida.appsecret');
+        $this->appType = $app_type ?? config('services.yida.app_type');
+        $this->systemToken = $system_token ?? config('services.yida.system_token');
+        $this->appKey = $appkey ?? config('services.yida.appkey');
+        $this->appSecret = $appsecret ?? config('services.yida.appsecret');
 
-        $access_token = Cache::get($this->cache_yida_access_token_key);
+        $access_token = Cache::get($this->appType.$this->cache_yida_access_token_key);
 
         if (! empty($access_token)) {
             $this->access_token = $access_token;
@@ -86,7 +89,7 @@ class YiDaServices
         $rs = $client->getAccessToken($getAccessTokenRequest);
 
         $this->access_token = $rs->body?->accessToken;
-        Cache::put($this->cache_yida_access_token_key, $rs->body->accessToken, bcsub($rs->body->expireIn, 20));
+        Cache::put($this->appType.$this->cache_yida_access_token_key, $rs->body->accessToken, bcsub($rs->body->expireIn, 20));
     }
 
     /**
@@ -222,6 +225,24 @@ class YiDaServices
         ]);
 
         return $client->getFormDataByIDWithOptions($instId, $getFormDataByIDRequest, $getFormDataByIDHeaders, new RuntimeOptions([]));
+    }
+
+    /**
+     * 根据流程实例ID获取流程实例
+     * https://open.dingtalk.com/document/orgapp/queries-a-process-instance-based-on-its-id
+     */
+    public function getProcessInstId($instId, $userId, $appType = null, $systemToken = null): GetInstanceByIdResponse
+    {
+        $client = self::createClient();
+        $getInstanceByIdHeaders = new GetInstanceByIdHeaders([]);
+        $getInstanceByIdHeaders->xAcsDingtalkAccessToken = $this->access_token;
+        $getInstanceByIdRequest = new GetInstanceByIdRequest([
+            'appType' => $appType ?? $this->appType,
+            'systemToken' => $systemToken ?? $this->systemToken,
+            'userId' => $userId,
+        ]);
+
+        return $client->getInstanceByIdWithOptions($instId, $getInstanceByIdRequest, $getInstanceByIdHeaders, new RuntimeOptions([]));
     }
 
     /**
